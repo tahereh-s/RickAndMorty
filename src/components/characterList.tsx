@@ -6,7 +6,7 @@ interface Props {
   character: any;
 }
 
-const CharacterItemList: React.FC<Props> = ({ character }) => {
+const CharacterList: React.FC<Props> = ({ character }) => {
 
   return (
     <Card className='h-full' sx={{ maxWidth: 345 }}>
@@ -34,4 +34,4 @@ const CharacterItemList: React.FC<Props> = ({ character }) => {
   );
 };
 
-export default CharacterItemList;
+export default CharacterList;

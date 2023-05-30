@@ -1,25 +1,69 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { RootState } from "../app/store"
-
+import apolloClient from "../graphql/client";
+import { GET_ALL_CHARACTERS } from "../graphql/queries"
 interface CharacterState {
-    value: string;
+    characterInfo: [],
+    loading: boolean,
+    error: null |string,
 }
-const initialState = {
+interface FilterCharacter {
+    name?: string;
+    status?: string;
+    species?: string;
+    type?: string;
+    gender?: string;
+}
+const initialState:CharacterState = {
     // value:'morty',
-    characterInfo: {},
+    characterInfo: [],
     loading: false,
     error: null,
 }
+export const getCharacters = createAsyncThunk(
+    'characters/fetchCharacters',
+    async ({ page = 1, filter }: { page?: number; filter?: FilterCharacter }) => {
+
+        const { data } = await apolloClient.query({
+            query: GET_ALL_CHARACTERS,
+            variables: {
+                page,
+                filter,
+            },
+        });
+        return {
+            results: data.characters.results,
+            info: data.characters.info
+        };
+    },
+);
 
 export const characterSlice = createSlice({
     name: 'character',
     initialState,
-    reducers: {
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(
+            getCharacters.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+        builder.addCase(
+            getCharacters.fulfilled, (state,action) =>{
+                state.characterInfo=action.payload.results;
+                state.error=null;
+                state.loading=false;
+            })
+        builder.addCase(
+            getCharacters.rejected, (state, action) => {
+                // state.characterInfo = action.payload.info;
+                state.loading = true;
+                state.error = action.error.message ?? 'api has problem!'
+            }
+        );
 
     },
-    extraReducers: {},
 })
 
-export const { } = characterSlice.actions
+// export const characterActions = characterSlice.actions
 export default characterSlice.reducer

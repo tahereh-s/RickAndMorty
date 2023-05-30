@@ -1,19 +1,30 @@
 import { CircularProgress, Grid } from "@mui/material"
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import CharacterList from "./characterList";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_CHARACTERS } from "../graphql/queries";
+import { useEffect } from "react";
+import { getCharacters } from "./characterSlice";
+// import { useQuery } from "@apollo/client";
+// import { GET_ALL_CHARACTERS } from "../graphql/queries";
 const Character = () => {
 
-    // const { data, isLoading, error } = useAppSelector(
-    //     (state) => state.character
-    // );
-    const { error, data } = useQuery(GET_ALL_CHARACTERS, {
-        variables: { page: 1 }
-    })
+    // const { characterInfo, loading, error } = useAppSelector(state => state.character);
+    const characterInfo  = useAppSelector(state => state.character.characterInfo);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        console.log(characterInfo);
+        
+        dispatch(getCharacters({ page: 1, filter: {} }))
+    }, [dispatch])
 
 
-    // if (isLoading) return (
+
+
+
+
+
+    // if (loading) return (
     //     <div className="flex justify-center items-center h-full">
     //         <CircularProgress />
     //     </div>
@@ -29,12 +40,13 @@ const Character = () => {
     // }
     return (
         <Grid container py={8} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            {data?.characters?.results?.map((character: any) => (
+            {characterInfo?.map((character:any) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={character.id}>
                     <CharacterList character={character} />
                 </Grid>
             ))}
         </Grid>
+     
     )
 }
 

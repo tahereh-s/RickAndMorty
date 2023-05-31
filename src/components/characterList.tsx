@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 
 
 interface Props {
@@ -8,8 +8,8 @@ interface Props {
 
 const CharacterList: React.FC<Props> = ({ character }) => {
   return (
-      <>
-        <Card className='h-full' sx={{ maxWidth: 345 }}>
+    <Grid container py={2} rowSpacing={1} justifyContent="center">
+        <Card className='h-max' sx={{ maxWidth: 400 }} >
           <a className="no-underline">
             <CardMedia
               component="img"
@@ -31,7 +31,7 @@ const CharacterList: React.FC<Props> = ({ character }) => {
             </CardContent>
           </a>
         </Card>
-      </>
+      </Grid>
       );
 };
   export default CharacterList;

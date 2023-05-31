@@ -1,23 +1,41 @@
 import React, { useState } from 'react';
-import './App.css';
-// import { useQuery } from '@apollo/client';
-// import { GET_ALL_CHARACTERS } from './graphql/queries';
 import Character from './components/character';
-import { Grid, Pagination, TextField } from '@mui/material';
+import { Route, Routes } from 'react-router';
+import Home from './components/home';
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
-  // const { loading, error, data } = useQuery(GET_ALL_CHARACTERS, {
-  //   variables: { page: 1 }
-  // })
+
 
   return (
-   
-   <div>
-    <Character />
-    
-   </div>
+<div>
+      <Routes>
+        <Route path="" element={ <Home /> } />
+        <Route path="/characters" element={ <Character /> } />    
+        <Route path="*" element={
+          <div className="container">
+            <h1>Page not Found</h1><h1>Page not Found</h1><h1>Page not Found</h1>
+          </div>
+        } />
+         
+      </Routes>
+    </div>
 
+
+
+
+
+
+   
+    // <BrowserRouter>
+    //   <Layout>
+    //     <Routes>
+    //       <Route path="/" element={<Characters />} />
+    //       <Route path="/character/:id" element={<CharacterDetails />} />
+    //     </Routes>
+    //   </Layout>
+    // </BrowserRouter>
+    // <>
+    // <Home/> </>
   // <Grid sx={{ m: 6 }}>
   //   <Grid container alignItems="center">
   //     <Grid item xs={12}>

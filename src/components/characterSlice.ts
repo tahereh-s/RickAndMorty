@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction } from "@reduxjs/toolkit"
+// import type { PayloadAction } from "@reduxjs/toolkit"
 import apolloClient from "../graphql/client";
 import { GET_ALL_CHARACTERS } from "../graphql/queries"
 interface CharacterState {
     characterInfo: [],
     loading: boolean,
     error: null |string,
+    pageCount:number,
+    page:number
 }
 interface FilterCharacter {
     name?: string;
@@ -19,6 +21,8 @@ const initialState:CharacterState = {
     characterInfo: [],
     loading: false,
     error: null,
+    pageCount:1,
+    page:1
 }
 export const getCharacters = createAsyncThunk(
     'characters/fetchCharacters',
@@ -53,6 +57,9 @@ export const characterSlice = createSlice({
                 state.characterInfo=action.payload.results;
                 state.error=null;
                 state.loading=false;
+                state.page=action.payload.info.pages;
+                state.pageCount=action.payload.info.count;
+
             })
         builder.addCase(
             getCharacters.rejected, (state, action) => {
